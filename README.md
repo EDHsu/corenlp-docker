@@ -1,22 +1,32 @@
-FROM java:8
+# Stanford CoreNLP Docker Image
 
-http://nlp.stanford.edu/software/stanford-corenlp-full-2016-10-31.zip
+_Note: Be sure your Docker Environment has at least 4096MB RAM_
 
-ENV CORENLP_ARCHIVE_VERSION=2016-10-31
-ENV CORENLP_ARCHIVE=stanford-corenlp-full-${CORENLP_ARCHIVE_VERSION}.zip \
-    CORENLP_SHA1SUM=562d24203d09b497b851ac641be324c6ed59aa16 \
-    CORENLP_PATH=/corenlp \
-    CORENLP_SHA1_PATH=corenlp.sha1
+## Create a Docker-Machine
 
-RUN wget http://nlp.stanford.edu/software/$CORENLP_ARCHIVE \
-    && echo "$CORENLP_SHA1SUM $CORENLP_ARCHIVE" > corenlp.sha1 \
-    && sha1sum -c corenlp.sha1 \
-    && unzip $CORENLP_ARCHIVE \
-    && mv $(basename ../$CORENLP_ARCHIVE .zip) $CORENLP_PATH \
-    && rm $CORENLP_ARCHIVE \
-    && rm corenlp.sha1
+    docker-machine create \
+        --driver virtualbox \
+        --virtualbox-memory 4096 \
+        local
+    eval "$(docker-machine env local)";
 
-WORKDIR $CORENLP_PATH
+## Run the server
 
-EXPOSE 9000
-CMD ["java", "-mx4g", "-cp", "*", "edu.stanford.nlp.pipeline.StanfordCoreNLPServer", "9000"]
+    docker run -d -p 9000:9000 \
+        --name corenlp \
+        samartioli/corenlp
+
+## Test it
+
+    # Note: First time you hit the service it will take a while to load.. maybe minutes.
+    curl --data 'Lets go fishing on Sunday.' http://$(dm ip local):9000
+
+## Build
+
+    export VERS=$(cat image.version);
+    docker build -t corenlp:$VERS .
+
+    docker rm -f corenlp
+    docker run -d -p 9000:9000 \
+        --name corenlp \
+        corenlp:$VERS

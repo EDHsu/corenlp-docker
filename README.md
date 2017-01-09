@@ -16,6 +16,14 @@ _Note: Be sure your Docker Environment has at least 4096MB RAM_
         --name corenlp \
         samartioli/corenlp
 
+###### Logs
+
+    d logs -f corenlp
+
+###### Stats
+
+    docker stats
+
 ## Test it
 
     # Note: First time you hit the service it will take a while to load.. maybe minutes.

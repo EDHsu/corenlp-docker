@@ -10,7 +10,7 @@ _Note: Be sure your Docker Environment has at least 4096MB RAM_
 
     docker-machine create \
         --driver virtualbox \
-        --virtualbox-memory 4096 \
+        --virtualbox-memory 6144 \
         local
     eval "$(docker-machine env local)";
 
@@ -19,6 +19,9 @@ _Note: Be sure your Docker Environment has at least 4096MB RAM_
     docker run -d -p 9000:9000 \
         --name corenlp \
         samartioli/corenlp
+
+    de core-nlp
+    curl --data 'Lets go fishing this Sunday and next Friday with Tom Brady' http://localhost:9000
 
 ###### Logs
 

@@ -23,6 +23,11 @@ _Note: Be sure your Docker Environment has at least 4096MB RAM_
     de core-nlp
     curl --data 'Lets go fishing this Sunday and next Friday with Tom Brady' http://localhost:9000
 
+## Load zh source corpus and run the server
+
+    java -mx6g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -serverProperties StanfordCoreNLP-chinese.properties -port 9000
+
+
 ###### Logs
 
     d logs -f corenlp
